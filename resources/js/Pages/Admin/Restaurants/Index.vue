@@ -58,7 +58,7 @@ defineProps({
                                     <td>
                                         <Link :href="route('admin.restaurants.edit', restaurant)"
                                         class="btn btn-secondary"
-                                        v-if="can('restaurant.update')" 
+                                        v-if="can('restaurant.update')"
                                         >
                                         Edit
                                         </Link>

@@ -25,6 +25,8 @@ class PermissionSeeder extends Seeder
         $resources = [
             'user',
             'restaurant',
+            'category',
+            'product',
         ];
 
         collect($resources)
