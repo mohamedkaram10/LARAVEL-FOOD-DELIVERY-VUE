@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\City;
-use Inertia\Inertia;
-use Inertia\Response;
-use App\Models\Restaurant;
-use App\Http\Controllers\Controller;
-use App\Enums\RoleName;
-use App\Http\Requests\Admin\StoreRestaurantRequest;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
+use Inertia\Inertia;
+use Inertia\Response;
+use App\Enums\RoleName;
+use App\Models\Restaurant;
 use Illuminate\Support\Facades\DB;
-use App\Notifications\RestaurantOwnerInvitation;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\Admin\StoreRestaurantRequest;
+use App\Http\Requests\Admin\UpdateRestaurantRequest;
 
 class RestaurantController extends Controller
 {
@@ -53,11 +53,34 @@ class RestaurantController extends Controller
                 'name' => $validated['restaurant_name'],
                 'address' => $validated['address'],
             ]);
-
-            $user->notify(new RestaurantOwnerInvitation($validated['restaurant_name']));
-
         });
 
         return to_route('admin.restaurants.index');
+    }
+
+    public function edit(Restaurant $restaurant): Response
+    {
+        $this->authorize('restaurant.update');
+
+        $restaurant->load(['city', 'owner']);
+
+        return Inertia::render('Admin/Restaurants/Edit', [
+            'restaurant' => $restaurant,
+            'cities' => City::get(['id', 'name']),
+        ]);
+    }
+
+    public function update(UpdateRestaurantRequest $request, Restaurant $restaurant): RedirectResponse
+    {
+        $validated = $request->validated();
+
+        $restaurant->update([
+            'city_id' => $validated['city'],
+            'name' => $validated['restaurant_name'],
+            'address' => $validated['address'],
+        ]);
+
+        return to_route('admin.restaurants.index')
+            ->withStatus('Restaurant updated successfully.');
     }
 }

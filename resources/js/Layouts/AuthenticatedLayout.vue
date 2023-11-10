@@ -27,7 +27,8 @@ const showingNavigationDropdown = ref(false);
 
                             <!-- Navigation Links -->
                             <NavLink :href="route('admin.restaurants.index')"
-                                :active="route().current('admin.restaurants.index')">
+                            v-if="can('restaurant.viewAny')"
+                            :active="route().current('admin.restaurants.index')">
                                 Restaurants
                             </NavLink>
                         </div>
@@ -119,6 +120,9 @@ const showingNavigationDropdown = ref(false);
 
             <!-- Page Content -->
             <main>
+                <div v-if="$page.props.status" class="max-w-7xl mx-auto pt-6 px-4 sm:px-6 lg:px-8">
+                    <div class="alert alert-success">{{ $page.props.status }}</div>
+                </div>
                 <slot />
             </main>
         </div>

@@ -16,7 +16,7 @@ class StoreRestaurantRequest extends FormRequest
     {
         return [
             'restaurant_name' => ['required', 'string', 'max:255'],
-            'email'           => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
+            'email'           => ['required', 'string', 'email', 'max:255'],
             'owner_name'      => ['required', 'string', 'max:255'],
             'city_id'         => ['required', 'numeric', 'exists:cities,id'],
             'address'         => ['required', 'string', 'max:1000'],
